@@ -1,0 +1,6 @@
+{
+  "api": {
+    "guildToken": "your-api-token-with-guild-access-here",
+    "guildId": "your-guild-id-here"
+  }
+}
