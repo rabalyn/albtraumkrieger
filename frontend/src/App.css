@@ -1,0 +1,106 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 30s linear;
+  height: 60px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 200px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.content {
+  margin-top: 120px;
+  font-size: 1.2em;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.nav {
+  border-bottom: 0px;
+}
+
+.nav li a {
+  line-height: 60px;
+}
+
+.nav-tabs > li.active > a {
+  color: #3c5a78;
+}
+
+.nav-tabs > li > a {
+  color: #b6b6b6;
+}
+
+.nav-tabs > li > a:hover{
+  background-color: #222 !important;
+  border-radius: 5px;
+  color:#fff;
+  border:0px;
+}
+
+.nav-tabs > li > a.active,
+.nav-tabs > li > a.active:focus,
+.nav-tabs > li > a.active:hover{
+  background-color: #fff !important;
+  border-radius: 0px;
+  border:0px;
+}
+
+.row {
+  margin-bottom: 1em;
+}
+
+.guildmember {
+  cursor: default;
+}
+
+.card-body > ul > li {
+  text-align: left;
+}
+
+.rank {
+  margin: 1em;
+}
+
+.image-gallery-image > img{
+  max-width: 90%;
+  height: auto;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+  background-image: url('./background-img.jpg');
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 40px;
+  line-height: 40px; /* Vertically center the text there */
+  background-color: #3E4551;
+}
