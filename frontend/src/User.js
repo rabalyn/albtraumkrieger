@@ -3,9 +3,8 @@ import React, { Component } from 'react'
 class User extends Component {
   render() {
     return (
-      <div className="content row">
-        <div className="col-md-1 col-lg-3 col-xl-3"></div>
-        <div className="card col-xs-12 col-sm-12 col-md-10 col-lg-6 col-xl-6">
+      <div className="content row justify-content-center">
+        <div className="col-xs-12 col-sm-12 col-md-10 col-lg-6 col-xl-6 card">
           <h5 className="card-header">Login</h5>
           <div className="card-body">
             <form>
