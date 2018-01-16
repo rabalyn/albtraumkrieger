@@ -3,9 +3,8 @@ import React, { Component } from 'react'
 class Home extends Component {
   render() {
     return (
-      <div className="content row home">
-        <div className="col-2"></div>
-        <div className="col-8 card">
+      <div className="content row home justify-content-center">
+        <div className="col-xs-12 col-sm-12 col-md-10 col-lg-9 col-xl-9 card">
           <h5 className="card-header">Willkommen</h5>
           <div className="card-body">
             <h5 className="card-title">Albtraumkrieger</h5>
