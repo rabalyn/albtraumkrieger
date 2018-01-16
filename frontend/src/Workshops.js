@@ -5,13 +5,8 @@ import images from './Workshop-images'
 class Workshops extends Component {
   render() {
     return (
-      <div className="content">
-        <div className="card">
-          <h5 className="card-header">Workshops</h5>
-          <div className="card-body">
-            <ImageGallery images={images} />
-          </div>
-        </div>
+      <div className="content row justify-content-center">
+        <ImageGallery images={images} title="Workshops" />
       </div>
     )
   }
