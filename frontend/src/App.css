@@ -1,30 +1,31 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 30s linear;
-  height: 60px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 200px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
 .content {
-  margin-top: 120px;
+  margin-top: 3em;
   font-size: 1.2em;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 4.8em;
+}
+
+@media (min-width: 576px) {
+  .content {
+    margin-top: 3em;
+    font-size: 1.2em;
+  }
+
+  body {
+    /* Margin bottom by footer height */
+    margin-bottom: 3em;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .content {
+    margin-top: 4.5em;
+    font-size: 1.2em;
+  }
 }
 
 @keyframes App-logo-spin {
@@ -32,12 +33,21 @@
   to { transform: rotate(360deg); }
 }
 
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 30s linear;
+  height: 45px;
+}
+
 .nav {
   border-bottom: 0px;
 }
 
 .nav li a {
-  line-height: 60px;
+  line-height: 45px;
 }
 
 .nav-tabs > li.active > a {
@@ -75,24 +85,29 @@
   text-align: left;
 }
 
-.rank {
+.card {
   margin: 1em;
 }
 
-.image-gallery-image > img{
+.image-gallery-content {
   max-width: 90%;
   height: auto;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  background-image: url('./background-img.jpg');
+body:before {
+  content: "";
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -10;
+  background: url('./background-img.jpg') no-repeat center center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .footer {
@@ -100,7 +115,7 @@ body {
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
-  height: 40px;
+  min-height: 40px;
   line-height: 40px; /* Vertically center the text there */
   background-color: #3E4551;
 }
