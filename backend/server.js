@@ -1,8 +1,7 @@
 const config = require('./config')
 
 const express = require('express')
-const login = require('./routes/loginroutes')
-const upload = require('./routes/fileroutes')
+const guildhall = require('./routes/guildhallroutes')
 const bodyParser = require('body-parser')
 /*
 Module:multer
@@ -21,17 +20,8 @@ app.use((req, res, next) => {
 })
 const router = express.Router()
 
-// test route
-router.get('/', function(req, res) {
-    res.json({ message: 'welcome to our upload module apis' })
-})
-
-//route to handle user registration
-router.post('/register',login.register)
-router.post('/login',login.login)
-//route to handle file printing and listing
-router.post('/fileprint',multerupload.any(),upload.fileprint)
-router.get('/members',upload.members)
-router.get('/hall', upload.guildhall)
-app.use('/api', router)
+router.get('/members',guildhall.members)
+router.get('/hall', guildhall.guildhall)
+router.get('/items', guildhall.items)
+app.use('/', router)
 app.listen(config.app.port)
