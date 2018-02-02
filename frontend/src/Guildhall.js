@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import config from './config'
 
 class Guildhall extends Component {
   componentDidMount() {
-    fetch('/hall')
+    const hallurl = config.apiurlbase + '/hall'
+    fetch(hallurl)
       .then(response => response.json())
       .then(jsonResponse => {
         const hallInfo = jsonResponse.result
@@ -10,6 +12,13 @@ class Guildhall extends Component {
         this.setState({
           guildlog: parsedLog
         })
+      })
+
+    const itemsurl = config.apiurlbase + '/items'
+    fetch(itemsurl)
+      .then(response => response.json())
+      .then(jsonResponse => {
+        console.table(jsonResponse)
       })
   }
 

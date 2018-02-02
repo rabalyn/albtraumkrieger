@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import Rank from './Rank'
+import config from './config'
 
 class Members extends Component {
   compareDate(a, b) {
@@ -16,7 +17,8 @@ class Members extends Component {
       $('[data-toggle="tooltip"]').tooltip()
     })
 
-    fetch('/members')
+    const url = config.apiurlbase + '/members'
+    fetch(url)
       .then(response => {
         return response.json()
       })
