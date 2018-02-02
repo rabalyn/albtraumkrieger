@@ -22,21 +22,23 @@ class Members extends Component {
       })
       .then(jsonResponse => {
         const members = jsonResponse.result
+        let ranks = []
+        members.forEach(member => {
+          if(ranks.indexOf(member.rank) === -1) {
+            ranks.push(member.rank)
+          }
+        })
+
+        const allRanks = {}
+        ranks.forEach(rank => {
+          allRanks[rank] = members.filter(member => member.rank === rank).sort(this.compareDate)
+        })
 
         const memberNames = members.map((member) => member.name.split('.')[0])
-        const firstborns = members.filter(member => member.rank === 'Firstborn').sort(this.compareDate)
-        const shadyWardens = members.filter(member => member.rank === 'Shady Warden').sort(this.compareDate)
-        const vacationers = members.filter(member => member.rank === 'Vacationer').sort(this.compareDate)
-        const nightmareScout = members.filter(member => member.rank === 'Nightmare Scout').sort(this.compareDate)
-        const bloodstones = members.filter(member => member.rank === 'Fam Bloodstone').sort(this.compareDate)
 
         this.setState({
           memberNames: memberNames,
-          firstborns: firstborns,
-          shadyWardens: shadyWardens,
-          vacationers: vacationers,
-          nightmareScout: nightmareScout,
-          bloodstones: bloodstones
+          ranks: allRanks
         })
       })
   }
@@ -46,15 +48,15 @@ class Members extends Component {
   }
 
   render() {
-    if(this.state && this.state.firstborns) {
+    if(this.state && this.state.ranks) {
       return (
         <div className="content">
           <div className="row justify-content-center">
-            <Rank cols="col-xs-10 col-sm-10 col-md-5 col-lg-5 col-xl-5" name="Firstborn" rankMembers={this.state.firstborns} />
-            <Rank cols="col-xs-10 col-sm-10 col-md-5 col-lg-5 col-xl-5" name="Familie Bloodstone" rankMembers={this.state.bloodstones} />
-            <Rank cols="col-xs-10 col-sm-10 col-md-5 col-lg-5 col-xl-5" name="Shady Warden" rankMembers={this.state.shadyWardens} />
-            <Rank cols="col-xs-10 col-sm-10 col-md-5 col-lg-5 col-xl-5" name="Nightmare Scout" rankMembers={this.state.nightmareScout} />
-            <Rank cols="col-xs-10 col-sm-10 col-md-6 col-lg-6 col-xl-6" name="Vacationer" rankMembers={this.state.vacationers} />
+            {
+              Object.keys(this.state.ranks).map((rank, idx) => {
+                return <Rank cols="col-xs-10 col-sm-10 col-md-5 col-lg-5 col-xl-5" key={idx} name={rank} rankMembers={this.state.ranks[rank]} />
+              })
+            }
           </div>
         </div>
       )
