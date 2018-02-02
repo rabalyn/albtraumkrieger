@@ -54,10 +54,15 @@ class Guildhall {
   }
 
   loadItemstats(itemIds) {
-    this.api.itemstats().get(itemIds).then((itemstats) => {
-      //console.table(itemstats)
+    this.api.items().get(itemIds).then((itemstats) => {
+
+      console.log(itemstats)
       this.itemstats = itemstats
     })
+  }
+
+  getItemstats() {
+    return this.itemstats
   }
 }
 
