@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 
+import 'react-table/react-table.css'
 import './include/bootstrap'
 import './App.css'
 

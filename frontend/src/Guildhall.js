@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactTable from 'react-table'
 import config from './config'
 
 class Guildhall extends Component {
@@ -52,72 +53,122 @@ class Guildhall extends Component {
       const upgradeId = entry.upgrade_id || null
       const motd = entry.motd || null
 
+      let retString = ''
+
       // user invited
       if(type === 'invited') {
-        return String().concat(time, ': ', invitedBy, ' hat ', username, ' in die Gilde eingeladen')
+        retString = String().concat(invitedBy, ' hat ', username, ' in die Gilde eingeladen')
       }
       // user declined invitation
       if(type === 'invite_declined') {
-        return String().concat(time, ': ', username, ' hat die Einladung abgelehnt')
+        retString = String().concat(username, ' hat die Einladung abgelehnt')
       }
       // user accepted invitation
       if(type === 'joined') {
-        return String().concat(time, ': ', username, ' ist beigetreten')
+        retString = String().concat(username, ' ist beigetreten')
       }
       // user kicked
       if(type === 'kick' && username !== kickedBy) {
-        return String().concat(time, ': ', username, ' wurde von ', kickedBy, ' aus der Gilde geworfen')
+        retString = String().concat(username, ' wurde von ', kickedBy, ' aus der Gilde geworfen')
       }
       // user left guild
       if(type === 'kick' && username === kickedBy) {
-        return String().concat(time, ': ', username, ' hat die Gilde verlassen')
+        retString = String().concat(username, ' hat die Gilde verlassen')
       }
       // user withdraw coins
       if(type === 'stash' && operation === 'withdraw' && coins > 0) {
-        return String().concat(time, ': ', username, ' hat ', coins, ' entnommen')
+        retString = String().concat(username, ' hat ', coins, ' entnommen')
       }
       // user deposit coins
       if(type === 'stash' && operation === 'deposit' && coins > 0) {
-        return String().concat(time, ': ', username, ' hat ', coins, ' eingezahlt')
+        retString = String().concat(username, ' hat ', coins, ' eingezahlt')
       }
       // user withdraw item to stash
       if(type === 'stash' && operation === 'withdraw' && item.id > 0) {
-        return String().concat(time, ': ', username, ' hat ', item.count, ' ', item.id, ' aus dem Lager entnommen')
+        retString = String().concat(username, ' hat ', item.count, ' ', item.id, ' aus dem Lager entnommen')
       }
       // user deposit item to stash
       if(type === 'stash' && operation === 'deposit' && item.id > 0) {
-        return String().concat(time, ': ', username, ' hat ', item.count, ' ', item.id, ' in das Lager eingezahlt')
+        retString = String().concat(username, ' hat ', item.count, ' ', item.id, ' in das Lager eingezahlt')
       }
       // user deposit item to treasury, withdraw not possible
       if(type === 'treasury') {
-        return String().concat(time, ': ', username, ' hat ', item.count, ' ', item.id, ' in die Schatzkammer eingezahlt')
+        retString = String().concat(username, ' hat ', item.count, ' ', item.id, ' in die Schatzkammer eingezahlt')
       }
       // user rank changed
       if(type === 'rank_change') {
-        return String().concat(time, ': ', changedBy, ' hat den Rang von ', username, ' von "', oldRank, '" zu "', newRank, '" geändert')
+        retString = String().concat(changedBy, ' hat den Rang von ', username, ' von "', oldRank, '" zu "', newRank, '" geändert')
       }
       // motd changed
       if(type === 'motd') {
-        return String().concat(time, ': ', username, ' hat die Gildenankündigung geändert: ', motd)
+        retString = String().concat(username, ' hat die Gildenankündigung geändert: ', motd)
       }
       // guildhall upgrade
       if(type === 'upgrade') {
-        return String().concat(time, ': ', username, ' hat ', upgradeId, ' beauftragt')
+        retString = String().concat(username, ' hat ', upgradeId, ' beauftragt')
       }
 
-      return JSON.stringify(entry)
+      if(retString !== '') {
+        return {
+          date: time,
+          logentry: retString
+        }
+      } else {
+        return {
+          date: JSON.stringify(entry),
+          logentry: JSON.stringify(entry)
+        }
+      }
     })
 
     return parsedLog
   }
 
+  
   render() {
+    const columns = [
+      {
+        Header: 'Datum',
+        accessor: 'date',
+        width: 230,
+        style: {
+          "white-space": "normal"
+        }
+      },
+      {
+        Header: 'Logeintrag',
+        accessor: 'logentry',
+        maxWidth: 1900,
+        style: {
+          "white-space": "normal"
+        }
+      }
+    ]
+
     return (
       <div className="content row justify-content-center">
-        <div className="col-xs-12 col-sm-12 col-md-10 col-lg-9 col-xl-9 card">
+        <div className="col-12 card">
           <h5 className="card-header">Gildeninfo</h5>
           <div className="card-body">
             {
+              (this.state && this.state.guildlog)
+                ? (
+                  <ReactTable 
+                    data={this.state.guildlog}
+                    columns={columns}
+                    defaultPageSize={10}
+                    className="-striped -highlight"
+                    previousText="zurück"
+                    nextText="vor"
+                    loadingText="Lädt..."
+                    noDataText="Keine Einträge gefunden"
+                    pageText="Seite"
+                    ofText="von"
+                    rowsText="Zeilen"
+                  />
+                )
+                : 'foo'
+              /*
               (this.state && this.state.guildlog)
                 ? (
                   this.state.guildlog.map((entry, idx) => {
@@ -130,6 +181,7 @@ class Guildhall extends Component {
                   })
                 )
                 : 'foo'
+                */
             }
           </div>
         </div>
