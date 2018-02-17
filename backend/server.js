@@ -3,12 +3,7 @@ const config = require('./config')
 const express = require('express')
 const guildhall = require('./routes/guildhallroutes')
 const bodyParser = require('body-parser')
-/*
-Module:multer
-multer is middleware used to handle multipart form data
-*/
-const multer = require('multer')
-const multerupload = multer({ dest: 'fileprint/' })
+
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
