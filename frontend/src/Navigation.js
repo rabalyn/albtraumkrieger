@@ -9,6 +9,7 @@ import Manga from './Manga'
 import Workshops from './Workshops'
 import Screenshots from './Screenshots'
 import User from './User'
+import Roleplays from './Roleplays'
 
 const $ = window.jQuery
 
@@ -64,7 +65,7 @@ class Navigation extends Component {
                 <a className="nav-link" id="events-tab" data-toggle="tab" href="#tab-events" role="tab">Events</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" id="manga-tab" data-toggle="tab" href="#tab-manga" role="tab">GW2-Manga</a>
+                <a className="nav-link" id="roleplay-tab" data-toggle="tab" href="#tab-roleplay" role="tab">Roleplay</a>
               </li>
               <li className="nav-item">
                 <a className="nav-link" id="workshops-tab" data-toggle="tab" href="#tab-workshops" role="tab">Workshop</a>
@@ -84,8 +85,11 @@ class Navigation extends Component {
             <div className="tab-pane fade" id="tab-members" role="tabpanel"><Members /></div>
             <div className="tab-pane fade" id="tab-hall" role="tabpanel"><Guildhall /></div>
             <div className="tab-pane fade" id="tab-events" role="tabpanel"><Events /></div>
-            <div className="tab-pane fade" id="tab-manga" role="tabpanel"><Manga /></div>
-            <div className="tab-pane fade" id="tab-workshops" role="tabpanel"><Workshops /></div>
+            <div className="tab-pane fade" id="tab-roleplay" role="tabpanel"><Roleplays /></div>
+            <div className="tab-pane fade" id="tab-workshops" role="tabpanel">
+              <Manga />
+              <Workshops />
+            </div>
             <div className="tab-pane fade" id="tab-screenshots" role="tabpanel"><Screenshots /></div>
             <div className="tab-pane fade" id="tab-user" role="tabpanel"><User /></div>
           </div>

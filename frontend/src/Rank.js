@@ -13,8 +13,8 @@ class Rank extends Component {
             {
               this.props.rankMembers.map((member) => {
                 return (
-                  <dd key={member.name}>
-                    <RankMemberEntry membername={member.name.split('.')[0]} memberjoined={member.joined}/>
+                  <dd key={member.accountid}>
+                    <RankMemberEntry membername={member.accountid.split('.')[0]} memberjoined={member.joinedAt}/>
                   </dd>
                 )
               })

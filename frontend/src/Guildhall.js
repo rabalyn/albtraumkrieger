@@ -1,8 +1,16 @@
 import React, { Component } from 'react'
 import ReactTable from 'react-table'
+import client from 'gw2api-client'
 import config from './config'
 
 class Guildhall extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      guildlog: null
+    }
+  }
+
   componentDidMount() {
     const hallurl = config.apiurlbase + '/hall'
     fetch(hallurl)
@@ -19,15 +27,17 @@ class Guildhall extends Component {
     fetch(itemsurl)
       .then(response => response.json())
       .then(jsonResponse => {
-        console.table(jsonResponse)
+        //console.table(jsonResponse)
       })
   }
 
   _parseLog(rawLog) {
     if(!rawLog) return null
 
+    let api = client()
+    api.language('de')
+
     let parsedLog = rawLog.map((entry, idx) => {
-      //const logIndex = entry.id || null
       const username = entry.user
         ? entry.user.split('.')[0]
         : null
@@ -38,6 +48,7 @@ class Guildhall extends Component {
       const newRank = entry.new_rank || null
       const time = new Date(entry.time).toLocaleDateString('de') + ' - ' + new Date(entry.time).toLocaleTimeString('de')
       const type = entry.type || null
+      const action = entry.action || null
       const operation = entry.operation || null
       const kickedBy = entry.kicked_by
         ? entry.kicked_by.split('.')[0]
@@ -45,12 +56,10 @@ class Guildhall extends Component {
       const invitedBy = entry.invited_by
         ? entry.invited_by.split('.')[0]
         : null
-      const item = entry.item_id
-        ? { id: entry.item_id, count: entry.count }
-        : {}
+
+      const item = entry.itemName ? entry : {}
       const coins = entry.coins || null
-      //const upgradeAction = entry.action || null
-      const upgradeId = entry.upgrade_id || null
+
       const motd = entry.motd || null
 
       let retString = ''
@@ -85,15 +94,15 @@ class Guildhall extends Component {
       }
       // user withdraw item to stash
       if(type === 'stash' && operation === 'withdraw' && item.id > 0) {
-        retString = String().concat(username, ' hat ', item.count, ' ', item.id, ' aus dem Lager entnommen')
+        retString = String().concat(username, ' hat ', item.count, ' ', item.itemName, ' aus dem Lager entnommen')
       }
       // user deposit item to stash
       if(type === 'stash' && operation === 'deposit' && item.id > 0) {
-        retString = String().concat(username, ' hat ', item.count, ' ', item.id, ' in das Lager eingezahlt')
+        retString = String().concat(username, ' hat ', item.count, ' ', item.itemName, ' in das Lager eingezahlt')
       }
       // user deposit item to treasury, withdraw not possible
       if(type === 'treasury') {
-        retString = String().concat(username, ' hat ', item.count, ' ', item.id, ' in die Schatzkammer eingezahlt')
+        retString = String().concat(username, ' hat ', item.count, ' ', item.itemName, ' in die Schatzkammer eingezahlt')
       }
       // user rank changed
       if(type === 'rank_change') {
@@ -105,18 +114,29 @@ class Guildhall extends Component {
       }
       // guildhall upgrade
       if(type === 'upgrade') {
-        retString = String().concat(username, ' hat ', upgradeId, ' beauftragt')
+        if(action === 'queued') {
+          if(username) {
+            retString = String().concat(username, ' hat ', entry.upgradeName, ' beauftragt')
+          } else {
+            retString = String().concat(entry.upgradeName, ' wurde beauftragt')
+          }
+        }
+        if(action === 'completed') {
+          retString = String().concat(entry.count + 'x ' + entry.itemName, ' fertig gestellt')
+        }
       }
 
       if(retString !== '') {
         return {
           date: time,
-          logentry: retString
+          logentry: retString,
+          entryicon: entry.icon
         }
       } else {
         return {
           date: JSON.stringify(entry),
-          logentry: JSON.stringify(entry)
+          logentry: JSON.stringify(entry),
+          entryicon: ''
         }
       }
     })
@@ -132,15 +152,18 @@ class Guildhall extends Component {
         accessor: 'date',
         width: 230,
         style: {
-          "white-space": "normal"
+          "whiteSpace": "normal"
         }
       },
       {
         Header: 'Logeintrag',
+        Cell: (row) => {
+          return <div>{row.value}<img hspace="10" src={row.original.entryicon} alt=""></img></div>
+        },
         accessor: 'logentry',
         maxWidth: 1900,
         style: {
-          "white-space": "normal"
+          "whiteSpace": "normal"
         }
       }
     ]
@@ -167,21 +190,7 @@ class Guildhall extends Component {
                     rowsText="Zeilen"
                   />
                 )
-                : 'foo'
-              /*
-              (this.state && this.state.guildlog)
-                ? (
-                  this.state.guildlog.map((entry, idx) => {
-                    return (
-                      <dl key={idx} className="row">
-                        <dt key={idx + "dt"} className="col-xs-12 col-sm-12 col-md-12 col-lg-5 col-xl-4">{entry.split(':')[0]}:{entry.split(':')[1]}:{entry.split(':')[2]}</dt>
-                        <dd key={idx + "dd"} className="col-xs-12 col-sm-12 col-md-12 col-lg-7 col-xl-8">{entry.split(':')[3]}</dd>
-                      </dl>
-                    )
-                  })
-                )
-                : 'foo'
-                */
+                : 'Gildenlog nicht erreichbar...'
             }
           </div>
         </div>

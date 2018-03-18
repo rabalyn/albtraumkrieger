@@ -36,7 +36,7 @@ class Members extends Component {
           allRanks[rank] = members.filter(member => member.rank === rank).sort(this.compareDate)
         })
 
-        const memberNames = members.map((member) => member.name.split('.')[0])
+        const memberNames = members.map((member) => member.accountid.split('.')[0])
 
         this.setState({
           memberNames: memberNames,
