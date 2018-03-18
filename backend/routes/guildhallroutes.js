@@ -1,9 +1,6 @@
 'use strict'
 
 const config = require('../config')
-import Storage from './Storage'
-const storage = new Storage(config)
-storage.checkConnection()
 
 import Gw2members from '../lib/gw2-members'
 const gw2members = new Gw2members({
@@ -19,7 +16,7 @@ const gw2hall = new Gw2hall({
 
 gw2members.loadMembers()
 gw2hall.loadLog()
-gw2hall.loadItemstats()
+//gw2hall.loadItemstats()
 
 exports.members = (req, res) => {
   return res.send({
@@ -40,4 +37,29 @@ exports.items = (req, res) => {
     "code": 200,
     "result": gw2hall.getItemstats()
   })
+}
+
+async function _findOrSaveItem(entry) {
+  if (entry.item_id && entry.count) {
+    await that.api.items().get(entry.item_id).then(item => {
+      Item.findOrCreate({
+        where: {
+          item_id: item.item_id
+        },
+        defaults: {
+          item_id: item.item_id,
+          name: item.name,
+          description: item.description,
+          type: item.type,
+          level: item.level,
+          rarity: item.rarity,
+          vendor_value: item.vendor_value,
+          chat_link: item.chat_link,
+          icon: item.icon
+        }
+      })
+    }).catch(reason => console.log(reason))
+  }
+
+  return { id: '', count: 0 }
 }

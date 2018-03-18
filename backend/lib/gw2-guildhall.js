@@ -1,6 +1,9 @@
 import gw2apiClient from 'gw2api-client'
 import cacheMemory from 'gw2api-client/build/cache/memory'
 import autobind from 'auto-bind'
+import models from '../models'
+const Item = models.Item
+const Upgrade = models.Upgrade
 
 class Guildhall {
   constructor(obj) {
@@ -44,12 +47,46 @@ class Guildhall {
 
   loadLog() {
     this.api.guild(this.guildId).log().get().then((guildlog) => {
-      //console.table(upgrades)
-      this.guildlog = guildlog
+      let enrichedGuildlog = []
+      guildlog.forEach((entry, idx) => {
+        if(entry && entry.item_id) {
+          const logitemid = entry.item_id
+          const myItem = Item
+          myItem.findOne({ 'itemid': logitemid }).exec((err, doc) => {
+            if(err) {
+              console.error('loadLog: ', err)
+            } else {
+              entry.itemName = doc.name
+              entry.description = doc.description
+              entry.icon = doc.icon
+              enrichedGuildlog.push(entry)
+            }
+          })
+        } else if(entry && entry.upgrade_id) {
+          const upgrade_id = entry.upgrade_id
+          Upgrade.findOne({ 'upgradeid': upgrade_id}).exec((err, doc) => {
+            if(err) {
+              console.error('loadLog: ', err)
+            } else {
+              entry.upgradeName = doc.name
+              entry.description = doc.description
+              entry.icon = doc.icon
+              enrichedGuildlog.push(entry)
+            }
+          })
+          
+        }
+      })
+      this.guildlog = enrichedGuildlog
+    }).catch(reason => {
+      console.error(reason)
     })
   }
 
   getLog() {
+    console.log('getlog')
+    console.log(this.guildlog)
+    console.log('gotlog')
     return this.guildlog
   }
 
@@ -58,6 +95,8 @@ class Guildhall {
 
       console.log(itemstats)
       this.itemstats = itemstats
+    }).catch(reason => {
+      console.error('loadItemstats: ' + reason)
     })
   }
 

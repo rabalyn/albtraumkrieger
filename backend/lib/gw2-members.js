@@ -1,6 +1,8 @@
 import gw2apiClient from 'gw2api-client'
 import cacheMemory from 'gw2api-client/build/cache/memory'
 import autobind from 'auto-bind'
+import models from '../models'
+const User = models.User
 
 class Members {
   constructor(obj) {
@@ -19,12 +21,20 @@ class Members {
     this.api.cacheStorage(cacheMemory())
     this.api.language('de')
     this.api.authenticate(this.apiKey)
+
+    this.members = []
   }
 
-  loadMembers() {
-    this.api.guild(this.guildId).members().get().then((memberlist) => {
-      this.members = memberlist
-    })
+  async loadMembers() {
+    await User
+      .find((err, rows) => {
+        if(err) {
+          console.error('loadMembers: ', err)
+          this.members = []
+        } else {
+          this.members = rows
+        }
+      })
   }
 
   getMembers() {

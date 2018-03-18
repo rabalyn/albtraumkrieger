@@ -1,7 +1,14 @@
+process.env.DEBUG = 'updateStore:*'
+
+import debug from 'debug'
+const logdebug = debug('server:debug')
+logdebug('Executing server.js....')
+
 const config = require('./config')
 
 const express = require('express')
 const guildhall = require('./routes/guildhallroutes')
+const updateStore = require('./routes/updateStore')
 const bodyParser = require('body-parser')
 
 const app = express()
@@ -15,7 +22,8 @@ app.use((req, res, next) => {
 })
 const router = express.Router()
 
-router.get('/members',guildhall.members)
+router.get('/members', guildhall.members)
+router.get('/saveMembers', updateStore.loadMembersFromApi)
 router.get('/hall', guildhall.guildhall)
 router.get('/items', guildhall.items)
 app.use('/', router)
