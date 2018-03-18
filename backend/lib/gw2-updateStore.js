@@ -108,11 +108,14 @@ class UpdateStore {
         newItem.save((err, res) => {
           if(err) {
             logerror('loadItemsFromApi: %O', err)
+          } else {
+            logdebug('saved item: %O', res)
           }
         })
       })
 
       callback(null, itemlist)
+
     }).catch(reason => {
       logerror('loadItemsFromApi: %O', reason)
     })
@@ -152,6 +155,8 @@ class UpdateStore {
         newUpgrade.save((err, res) => {
           if (err) {
             logerror('loadGuildhallUpgradesFromApi: %O', err)
+          } else {
+            logdebug('saved upgrade: %O', res)
           }
         })
       })
