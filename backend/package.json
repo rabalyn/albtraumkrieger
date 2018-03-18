@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "babel-node": "babel-node --presets=env --ignore='node_modules'",
     "start": "export DEBUG='updateStore:*' ; npm run start-server",
-    "start-server": "nodemon --exec npm run babel-node -- server.js"
+    "start-server": "nodemon --exec npm run babel-node -- server.js",
+    "initdb": "export DEBUG='updateStore:*' ; babel-node --presets=env --irgnore='node_modules' -- initdb.js"
   },
   "author": "@rabalyn",
   "license": "MIT",

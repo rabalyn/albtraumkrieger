@@ -66,6 +66,8 @@ class UpdateStore {
       })
 
       callback(null, memberlist)
+    }).catch(reason => {
+      logerror('loadMembersFromApi: %O', reason)
     })
   }
 
@@ -89,8 +91,9 @@ class UpdateStore {
   }
 
   loadItemsFromApi(callback) {
+    logdebug('loadItemsFromApi')
     this.api.items().all().then((itemlist) => {
-      itemlist.forEach(item => {
+      async.each(itemlist, (item, cb) => {
         const itemDetails = {
           itemid: item.id,
           name: item.name,
@@ -109,13 +112,21 @@ class UpdateStore {
           if(err) {
             logerror('loadItemsFromApi: %O', err)
           } else {
-            logdebug('saved item: %O', res)
+            //logdebug('saved item: %O', res)
           }
+
+          cb()
         })
+      }, (err) => {
+        if(err) {
+          logerror('loadItemsFromApi: %O', err)
+        } else {
+          logdebug('loadItemsFromApi: loaded')
+        }
+
+        logdebug('calling callback')
+        callback(err, true)
       })
-
-      callback(null, itemlist)
-
     }).catch(reason => {
       logerror('loadItemsFromApi: %O', reason)
     })

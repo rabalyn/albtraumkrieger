@@ -9,15 +9,16 @@ const updateStore = new UpdateStore({
 })
 
 
-updateStore.saveItems((err, data) => {
-  console.log(err, data)
-})
-/*
-updateStore.saveMembers((err, data) => {
-  console.log(err, data)
+updateStore.saveItems((err, list) => {
+  console.log(err, list)
 })
 
-updateStore.saveUpgrades((err, data) => {
-  console.log(err, data)
+/*
+updateStore.saveMembers((err, list) => {
+  console.log(err, list)
+})
+
+updateStore.saveUpgrades((err, list) => {
+  console.log(err, list)
 })
 */
