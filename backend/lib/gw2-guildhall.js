@@ -26,21 +26,18 @@ class Guildhall {
 
   loadUpgrades() {
     this.api.guild(this.guildId).upgrades().get().then((upgrades) => {
-      //console.table(upgrades)
       this.guildupgrades =  upgrades
     })
   }
 
   loadGuildranks() {
     this.api.guild(this.guildId).ranks().get().then((guildranks) => {
-      //console.table(guildranks)
       this.guildranks = guildranks
     })
   }
 
   loadStorage() {
     this.api.guild(this.guildId).storage().get().then((upgrades) => {
-      //console.table(upgrades)
       this.guildStoredUpgrades = upgrades
     })
   }
@@ -49,6 +46,10 @@ class Guildhall {
     this.api.guild(this.guildId).log().get().then((guildlog) => {
       let enrichedGuildlog = []
       guildlog.forEach((entry, idx) => {
+        if(entry && entry.type === 'upgrade' && entry.action === 'queued' && !entry.user) {
+          return
+          console.log(entry)
+        }
         if(entry && entry.item_id) {
           const logitemid = entry.item_id
           const myItem = Item
@@ -74,7 +75,8 @@ class Guildhall {
               enrichedGuildlog.push(entry)
             }
           })
-          
+        } else {
+          enrichedGuildlog.push(entry)
         }
       })
       this.guildlog = enrichedGuildlog
@@ -84,16 +86,11 @@ class Guildhall {
   }
 
   getLog() {
-    console.log('getlog')
-    console.log(this.guildlog)
-    console.log('gotlog')
     return this.guildlog
   }
 
   loadItemstats(itemIds) {
     this.api.items().get(itemIds).then((itemstats) => {
-
-      console.log(itemstats)
       this.itemstats = itemstats
     }).catch(reason => {
       console.error('loadItemstats: ' + reason)
