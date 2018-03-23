@@ -1,7 +1,18 @@
 import React, { Component } from 'react'
-import ReactTable from 'react-table'
 import client from 'gw2api-client'
 import config from './config'
+import MOTD from './MOTD'
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
+import BootstrapTable from 'react-bootstrap-table-next'
+
+import 'react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css'
+import paginationFactory from 'react-bootstrap-table2-paginator'
+import filterFactory, { textFilter } from 'react-bootstrap-table2-filter'
+
+import moment from 'moment'
+import 'moment/locale/de'
+
+import uuidv1 from 'uuid/v1'
 
 class Guildhall extends Component {
   constructor(props) {
@@ -46,9 +57,10 @@ class Guildhall extends Component {
         : null
       const oldRank = entry.old_rank || null
       const newRank = entry.new_rank || null
-      const time = new Date(entry.time).toLocaleDateString('de') + ' - ' + new Date(entry.time).toLocaleTimeString('de')
+      const time = new moment(entry.time).locale('de').format(config.datetimeformat)
       const type = entry.type || null
       const action = entry.action || null
+      const activity = entry.activity || null
       const operation = entry.operation || null
       const kickedBy = entry.kicked_by
         ? entry.kicked_by.split('.')[0]
@@ -92,6 +104,10 @@ class Guildhall extends Component {
       if(type === 'stash' && operation === 'deposit' && coins > 0) {
         retString = String().concat(username, ' hat ', coins, ' eingezahlt')
       }
+      // user move item
+      if (type === 'stash' && operation === 'move' && item.id > 0) {
+        retString = String().concat(username, ' hat ', item.itemName, ' verschoben')
+      }
       // user withdraw item to stash
       if(type === 'stash' && operation === 'withdraw' && item.id > 0) {
         retString = String().concat(username, ' hat ', item.count, ' ', item.itemName, ' aus dem Lager entnommen')
@@ -121,22 +137,42 @@ class Guildhall extends Component {
             retString = String().concat(entry.upgradeName, ' wurde beauftragt')
           }
         }
-        if(action === 'completed') {
+        if(action === 'completed' || action === 'complete') {
           retString = String().concat(entry.count + 'x ' + entry.itemName, ' fertig gestellt')
         }
+      }
+      // daily login activity, old reward, but still...
+      if(type === 'influence' && activity === 'daily_login') {
+        retString = String().concat('Einfluss für täglichen Login')
+      }
+      if(type === 'influence' && activity === 'gifted') {
+        const total_participants = entry.total_participants
+        const users = entry.participants.map(user => user.split('.')[0])
+        const loginString = total_participants === 0 
+          ? ' Gildenmitglied hat sich eingeloggt'
+          : total_participants === 1 
+            ? String().concat(total_participants, ' Gildenmitglied hat sich eingeloggt: ', users.join(','))
+            : String().concat(total_participants, ' Gildenmitglieder haben sich eingeloggt: ', users.join(','))
+        retString = loginString
       }
 
       if(retString !== '') {
         return {
+          id: uuidv1(),
           date: time,
+          sortDate: entry.time,
           logentry: retString,
-          entryicon: entry.icon
+          entryicon: entry.icon ? entry.icon : '',
+          motd: motd ? motd : ''
         }
       } else {
         return {
+          id: uuidv1(),
           date: JSON.stringify(entry),
+          sortDate: '',
           logentry: JSON.stringify(entry),
-          entryicon: ''
+          entryicon: '',
+          motd: ''
         }
       }
     })
@@ -144,27 +180,65 @@ class Guildhall extends Component {
     return parsedLog
   }
 
-  
+  filterFunction(cell, row) {
+    // just return type for filtering or searching.
+    return cell.type;
+  }
+
   render() {
     const columns = [
       {
-        Header: 'Datum',
-        accessor: 'date',
-        width: 230,
-        style: {
-          "whiteSpace": "normal"
+        text: 'sort Date',
+        dataField: 'sortDate',
+        hidden: true,
+        sort:true
+      },
+      {
+        text: 'Datum',
+        dataField: 'date',
+        headerStyle: {
+          width: '20%'
         }
       },
       {
-        Header: 'Logeintrag',
-        Cell: (row) => {
-          return <div>{row.value}<img hspace="10" src={row.original.entryicon} alt=""></img></div>
+        text: '',
+        dataField: 'entryicon',
+        headerStyle: {
+          width: '10%'
         },
-        accessor: 'logentry',
-        maxWidth: 1900,
-        style: {
-          "whiteSpace": "normal"
+        formatter: (cell, row) => {
+          return (
+            <img src={cell} alt="" />
+          )
         }
+      },
+      {
+        text: 'Logeintrag',
+        dataField: 'logentry',
+        headerStyle: {
+          width: '70%'
+        },
+        filter: textFilter(),
+        formatter: (cell, row) => {
+          if(row.motd) {
+            const userString = cell.split(':')[0]
+            return (
+              <div>
+                {userString} &nbsp;
+                <MOTD motd={row.motd} />
+              </div>
+            )
+          } else {
+            return cell
+          }
+        }
+      }
+    ]
+
+    const defaultSortArray = [
+      {
+        dataField: 'sortDate',
+        order: 'desc'
       }
     ]
 
@@ -176,18 +250,16 @@ class Guildhall extends Component {
             {
               (this.state && this.state.guildlog)
                 ? (
-                  <ReactTable 
+                  <BootstrapTable
+                    keyField="id"
                     data={this.state.guildlog}
                     columns={columns}
-                    defaultPageSize={10}
-                    className="-striped -highlight"
-                    previousText="zurück"
-                    nextText="vor"
-                    loadingText="Lädt..."
-                    noDataText="Keine Einträge gefunden"
-                    pageText="Seite"
-                    ofText="von"
-                    rowsText="Zeilen"
+                    pagination={paginationFactory()}
+                    striped={true}
+                    hover={true}
+                    condensed={true}
+                    defaultSorted={defaultSortArray}
+                    filter={filterFactory()}
                   />
                 )
                 : 'Gildenlog nicht erreichbar...'
