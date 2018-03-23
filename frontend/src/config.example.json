@@ -1,6 +1,4 @@
 {
-  "api": {
-    "guildToken": "your-api-token-with-guild-access-here",
-    "guildId": "your-guild-id-here"
-  }
+  "apiurlbase": "http://localhost:4000",
+  "datetimeformat": "Do MMMM YYYY, HH:mm"
 }
