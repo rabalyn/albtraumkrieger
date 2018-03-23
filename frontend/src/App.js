@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 
 import 'react-table/react-table.css'
 import './include/bootstrap'
-import './App.css'
+import './styles/css/cardColumns.css'
+import './styles/css/App.css'
 
 import Navbar from './Navigation'
 import Footer from './Footer'
