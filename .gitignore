@@ -1,11 +1,11 @@
 frontend/build/
 frontend/node_modules/
-frontend/package-lock.json
-backend/package-lock.json
 backend/node_modules/
 backend/config.js
 backend/storage/
 frontend/src/Events-description.js
 frontend/src/config.json
-frontend/src/screenshot_imgs/
-frontend/src/workshop_imgs/
+frontend/src/imgs/screenshot_imgs/*
+frontend/src/imgs/workshop_imgs/*
+frontend/src/styles/css/cardColumns.css
+frontend/src/styles/css/cardColumns.css.map
