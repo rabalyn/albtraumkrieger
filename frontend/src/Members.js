@@ -54,11 +54,15 @@ class Members extends Component {
       return (
         <div className="content">
           <div className="row justify-content-center">
-            {
-              Object.keys(this.state.ranks).map((rank, idx) => {
-                return <Rank cols="col-xs-10 col-sm-10 col-md-5 col-lg-5 col-xl-5" key={idx} name={rank} rankMembers={this.state.ranks[rank]} />
-              })
-            }
+            <div className="col-12">
+            <div className="card-columns">
+              {
+                Object.keys(this.state.ranks).map((rank, idx) => {
+                  return <Rank cols="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12" key={idx} name={rank} rankMembers={this.state.ranks[rank]} />
+                })
+              }
+            </div>
+            </div>
           </div>
         </div>
       )
