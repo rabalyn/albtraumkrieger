@@ -18,6 +18,14 @@ gw2members.loadMembers()
 gw2hall.loadLog()
 //gw2hall.loadItemstats()
 
+import schedule from 'node-schedule'
+
+const j = schedule.scheduleJob('1 3 * * * *', () => {
+  console.log('loading log at ', new Date())
+  gw2hall.loadLog()
+  gw2members.loadMembers()
+})
+
 exports.members = (req, res) => {
   return res.send({
     "code": 200,

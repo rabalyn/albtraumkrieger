@@ -43,12 +43,12 @@ class Guildhall {
   }
 
   loadLog() {
+    console.log('loading log...')
     this.api.guild(this.guildId).log().get().then((guildlog) => {
       let enrichedGuildlog = []
       guildlog.forEach((entry, idx) => {
         if(entry && entry.type === 'upgrade' && entry.action === 'queued' && !entry.user) {
           return
-          console.log(entry)
         }
         if(entry && entry.item_id) {
           const logitemid = entry.item_id
@@ -80,12 +80,14 @@ class Guildhall {
         }
       })
       this.guildlog = enrichedGuildlog
+      console.log('log loaded', new Date())
     }).catch(reason => {
       console.error(reason)
     })
   }
 
   getLog() {
+    console.log('get guildlog')
     return this.guildlog
   }
 

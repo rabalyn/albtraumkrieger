@@ -94,6 +94,7 @@ class UpdateStore {
     logdebug('loadItemsFromApi')
     this.api.items().all().then((itemlist) => {
       async.each(itemlist, (item, cb) => {
+        logdebug('got item %o', item)
         const itemDetails = {
           itemid: item.id,
           name: item.name,

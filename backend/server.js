@@ -27,5 +27,6 @@ router.get('/saveMembers', updateStore.loadMembersFromApi)
 router.get('/hall', guildhall.guildhall)
 router.get('/items', guildhall.items)
 app.use('/', router)
+
 app.listen(config.app.port, config.app.host)
-app.listen(config.app.port, 'localhost')
+//app.listen(config.app.port, 'localhost')
