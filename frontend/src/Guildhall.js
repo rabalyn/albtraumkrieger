@@ -208,7 +208,7 @@ class Guildhall extends Component {
         },
         formatter: (cell, row) => {
           return (
-            <img src={cell} alt="" />
+            <img src={cell} alt="" width="64"/>
           )
         }
       },
