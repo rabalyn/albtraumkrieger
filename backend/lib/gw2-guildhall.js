@@ -2,6 +2,10 @@ import gw2apiClient from 'gw2api-client'
 import cacheMemory from 'gw2api-client/build/cache/memory'
 import autobind from 'auto-bind'
 import models from '../models'
+import debug from 'debug'
+const loginfo = debug('guildhall:info')
+const logdebug = debug('guildhall:debug')
+const logerror = debug('guildhall:error')
 const Item = models.Item
 const Upgrade = models.Upgrade
 
