@@ -8,6 +8,7 @@ import Events from './Events'
 import Manga from './Manga'
 import Workshops from './Workshops'
 import Screenshots from './Screenshots'
+import DiscordChat from './DiscordTitanEmbed'
 import User from './User'
 import Roleplays from './Roleplays'
 
@@ -56,6 +57,9 @@ class Navigation extends Component {
                 </a>
               </li>
               <li className="nav-item">
+                <a className="nav-link" id="chat-tab" data-toggle="tab" href="#tab-chat" role="tab">Discord Chat</a>
+              </li>
+              <li className="nav-item">
                 <a className="nav-link" id="members-tab" data-toggle="tab" href="#tab-members" role="tab">Mitglieder</a>
               </li>
               <li className="nav-item">
@@ -82,13 +86,14 @@ class Navigation extends Component {
         <div className="container">
           <div className="tab-content" id="tabs-tabContent">
             <div className="tab-pane fade show active" id="tab-home" role="tabpanel"><Home /></div>
+            <div className="tab-pane fade" id="tab-chat" role="tabpanel"><DiscordChat /></div>
             <div className="tab-pane fade" id="tab-members" role="tabpanel"><Members /></div>
             <div className="tab-pane fade" id="tab-hall" role="tabpanel"><Guildhall /></div>
             <div className="tab-pane fade" id="tab-events" role="tabpanel"><Events /></div>
             <div className="tab-pane fade" id="tab-roleplay" role="tabpanel"><Roleplays /></div>
             <div className="tab-pane fade" id="tab-workshops" role="tabpanel">
-              <Manga />
               <Workshops />
+              <Manga />
             </div>
             <div className="tab-pane fade" id="tab-screenshots" role="tabpanel"><Screenshots /></div>
             <div className="tab-pane fade" id="tab-user" role="tabpanel"><User /></div>
