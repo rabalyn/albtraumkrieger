@@ -11,7 +11,7 @@ const events = {
         "text": "Guild action" // rendered text in UI
       },
       {
-        "id": "10", // id for react
+        "id": "11", // id for react
         "text": "Another Guild action" // rendered text in UI
       }
     ]
