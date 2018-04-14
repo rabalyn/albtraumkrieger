@@ -56,12 +56,23 @@ class UpdateStore {
           rank: member.rank
         }
 
-        const newMember = new User(userdetails)
-        newMember.save((err, res) => {
-          if (err) {
-            console.error('error during save: ', err)
+        User.register(new User({username: member.name}), member.name, (err, user) => {
+          if(err) {
+            logerror('User register failed: %O', err)
           }
-          logdebug('saved', res)
+
+          User.findOneAndUpdate(
+            { username: member.name }, // filter
+            userdetails,
+            { upsert: true, new: true}, // upsert: update or create new, new: return updated document
+            (err, user) => {
+              if(err) {
+                logerror('findOneAndUpdate member failed: %O', err)
+              } else {
+                logdebug('user: %o', user)
+              }
+            }
+          )
         })
       })
 
@@ -73,7 +84,7 @@ class UpdateStore {
 
   saveMembers() {
     async.waterfall([
-      this.cleanMembers,
+      //this.cleanMembers,
       this.loadMembersFromApi
     ])
   }
