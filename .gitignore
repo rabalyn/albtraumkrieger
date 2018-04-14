@@ -9,3 +9,6 @@ frontend/src/imgs/screenshot_imgs/*
 frontend/src/imgs/workshop_imgs/*
 frontend/src/styles/css/cardColumns.css
 frontend/src/styles/css/cardColumns.css.map
+albha.code-workspace
+backend/mongo_createUser.txt
+mongo_dev/
