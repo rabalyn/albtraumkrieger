@@ -33,12 +33,18 @@ class Guildhall extends Component {
           guildlog: parsedLog
         })
       })
+      .catch(reason => {
+        console.error(reason)
+      })
 
     const itemsurl = config.apiurlbase + '/items'
     fetch(itemsurl)
       .then(response => response.json())
       .then(jsonResponse => {
         //console.table(jsonResponse)
+      })
+      .catch(reason => {
+        console.error(reason)
       })
   }
 

@@ -43,6 +43,9 @@ class Members extends Component {
           ranks: allRanks
         })
       })
+      .catch(reason => {
+        console.error(reason)
+      })
   }
 
   componentDidUpdate() {
